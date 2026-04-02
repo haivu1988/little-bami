@@ -1,5 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Little Bami POS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body { font-family: Arial; padding: 10px; background: #f5f5f5; }
+.item { display:flex; justify-content:space-between; margin:10px 0; background:white; padding:10px; border-radius:10px;}
+button { font-size:18px; }
+.plus { background:green; color:white; }
+.minus { background:red; color:white; }
+.save { margin-top:15px; padding:12px; width:100%; background:green; color:white; border:none; border-radius:10px;}
+.reset { color:red; background:none; border:none; margin-top:10px;}
+</style>
+</head>
+
+<body>
+
+<h2>🥖 Little Bami</h2>
+
+<div id="list"></div>
+
+<h3>Tổng: <span id="total">0</span> đ</h3>
+
+<button class="save" onclick="saveOrder()">💾 Lưu đơn</button>
+<button class="reset" onclick="reset()">RESET</button>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
 <script>
-// Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBembvX5bvaYREuGj1FKhMneSU71XgkcvA",
   authDomain: "little-bami.firebaseapp.com",
@@ -9,19 +41,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// 🔥 REALTIME STATE
 let items = [];
 
+// REALTIME
 db.collection("state").doc("current").onSnapshot(doc => {
   if(doc.exists){
-    items = doc.data().items;
+    items = doc.data().items || [];
     render();
   } else {
     initData();
   }
 });
 
-// 🔥 INIT LẦN ĐẦU
+// INIT DATA
 function initData(){
   items = [
     {name:"Bánh mì thịt nướng",price:20000,qty:0},
@@ -32,11 +64,10 @@ function initData(){
     {name:"Bánh mì thịt chả",price:25000,qty:0},
     {name:"Bánh mì không",price:3000,qty:0},
   ];
-
   db.collection("state").doc("current").set({ items: items });
 }
 
-// 🔥 RENDER
+// RENDER
 function render(){
   let html="";
   let total=0;
@@ -48,9 +79,9 @@ function render(){
     <div class="item">
       <div>${item.name} (${item.price.toLocaleString()}đ)</div>
       <div>
-        <button onclick="minus(${i})">-</button>
+        <button class="minus" onclick="minus(${i})">-</button>
         ${item.qty}
-        <button onclick="plus(${i})">+</button>
+        <button class="plus" onclick="plus(${i})">+</button>
       </div>
     </div>`;
   });
@@ -59,30 +90,16 @@ function render(){
   document.getElementById("total").innerText=total.toLocaleString();
 }
 
-// 🔥 UPDATE FIREBASE
+// ACTION
 function updateDB(){
   db.collection("state").doc("current").set({ items: items });
 }
 
-// 🔥 ACTIONS
-function plus(i){
-  items[i].qty++;
-  updateDB();
-}
+function plus(i){ items[i].qty++; updateDB(); }
+function minus(i){ if(items[i].qty>0){ items[i].qty--; updateDB(); } }
+function reset(){ items.forEach(i=>i.qty=0); updateDB(); }
 
-function minus(i){
-  if(items[i].qty>0){
-    items[i].qty--;
-    updateDB();
-  }
-}
-
-function reset(){
-  items.forEach(i=>i.qty=0);
-  updateDB();
-}
-
-// 🔥 LƯU LỊCH SỬ (giữ lại)
+// SAVE ORDER
 function saveOrder(){
   let total = items.reduce((s,i)=>s+i.price*i.qty,0);
 
@@ -101,3 +118,6 @@ function saveOrder(){
   reset();
 }
 </script>
+
+</body>
+</html>
