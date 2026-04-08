@@ -41,7 +41,22 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-let items = [];
+let items = [
+  {name:"Bánh mì thịt nướng",price:20000,qty:0},
+  {name:"Bánh mì thịt nướng",price:25000,qty:0},
+  {name:"Bánh mì ốp la",price:15000,qty:0},
+  {name:"Bánh mì ốp la",price:20000,qty:0},
+  {name:"Bánh mì thịt chả",price:20000,qty:0},
+  {name:"Bánh mì thịt chả",price:25000,qty:0},
+  {name:"Bánh mì không",price:3000,qty:0},
+
+  // 🔥 THÊM MÓN MỚI
+  {name:"Bánh bao trắng",price:20000,qty:0},
+  {name:"Bánh bao vàng",price:22000,qty:0},
+  {name:"Bánh bao dứa",price:25000,qty:0},
+  {name:"Bánh bao xanh",price:16000,qty:0},
+  {name:"Bánh giò",price:15000,qty:0},
+];;
 
 // REALTIME
 db.collection("state").doc("current").onSnapshot(doc => {
