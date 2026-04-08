@@ -28,7 +28,7 @@ body {
 }
 
 .logo {
-  width:120px;
+  width:110px;
 }
 
 /* TITLE */
@@ -37,7 +37,7 @@ h2 {
   color:#1f8f8b;
 }
 
-/* ITEM CARD */
+/* ITEM */
 .item {
   display:flex;
   justify-content:space-between;
@@ -59,14 +59,12 @@ h2 {
   color:#777;
 }
 
-/* BUTTON GROUP */
 .controls {
   display:flex;
   align-items:center;
   gap:10px;
 }
 
-/* BUTTON */
 button {
   border:none;
   border-radius:50%;
@@ -115,7 +113,7 @@ button {
 
 <!-- LOGO -->
 <div class="logo-box">
-  <img src="/mnt/data/logo Little Bami.jpg" class="logo">
+  <img src="logo.png" class="logo">
 </div>
 
 <h2>Little Bami</h2>
@@ -131,7 +129,6 @@ button {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-// Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBembvX5bvaYREuGj1FKhMneSU71XgkcvA",
   authDomain: "little-bami.firebaseapp.com",
@@ -141,7 +138,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// MENU
 const defaultMenu = [
   {name:"Bánh mì thịt nướng",price:20000,qty:0},
   {name:"Bánh mì thịt nướng",price:25000,qty:0},
@@ -179,12 +175,10 @@ db.collection("state").doc("current").onSnapshot(doc => {
   }
 });
 
-// UPDATE
 function updateDB(){
   db.collection("state").doc("current").set({ items: items });
 }
 
-// RENDER
 function render(){
   let html="";
   let total=0;
@@ -211,11 +205,9 @@ function render(){
   document.getElementById("total").innerText=total.toLocaleString();
 }
 
-// ACTION
 function plus(i){ items[i].qty++; updateDB(); }
 function minus(i){ if(items[i].qty>0){ items[i].qty--; updateDB(); } }
 
-// RESET
 function resetWithPass(){
   let pass = prompt("Nhập mật khẩu:");
 
