@@ -32,6 +32,7 @@ button { font-size:18px; }
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
+// 🔥 Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBembvX5bvaYREuGj1FKhMneSU71XgkcvA",
   authDomain: "little-bami.firebaseapp.com",
@@ -41,21 +42,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-let items = [];
-
-// REALTIME
-db.collection("state").doc("current").onSnapshot(doc => {
-  if(doc.exists){
-    items = doc.data().items || [];
-    render();
-  } else {
-    initData();
-  }
-});
-
-// INIT DATA
-function initData(){
-items = [
+// 🔥 MENU MẶC ĐỊNH (LUÔN CẬP NHẬT)
+const defaultMenu = [
   {name:"Bánh mì thịt nướng",price:20000,qty:0},
   {name:"Bánh mì thịt nướng",price:25000,qty:0},
   {name:"Bánh mì ốp la",price:15000,qty:0},
@@ -64,17 +52,42 @@ items = [
   {name:"Bánh mì thịt chả",price:25000,qty:0},
   {name:"Bánh mì không",price:3000,qty:0},
 
-  // 🔥 THÊM MÓN MỚI
   {name:"Bánh bao trắng",price:20000,qty:0},
   {name:"Bánh bao vàng",price:22000,qty:0},
   {name:"Bánh bao dứa",price:25000,qty:0},
   {name:"Bánh bao xanh",price:16000,qty:0},
   {name:"Bánh giò",price:15000,qty:0},
 ];
+
+let items = [];
+
+// 🔥 REALTIME
+db.collection("state").doc("current").onSnapshot(doc => {
+  if(doc.exists){
+    let data = doc.data().items || [];
+
+    // 🔥 AUTO UPDATE MENU (điểm quan trọng)
+    if(data.length !== defaultMenu.length){
+      console.log("🔄 Cập nhật menu mới");
+      items = defaultMenu;
+      updateDB();
+    } else {
+      items = data;
+    }
+
+    render();
+  } else {
+    items = defaultMenu;
+    updateDB();
+  }
+});
+
+// 🔥 UPDATE DB
+function updateDB(){
   db.collection("state").doc("current").set({ items: items });
 }
 
-// RENDER
+// 🔥 RENDER
 function render(){
   let html="";
   let total=0;
@@ -97,16 +110,12 @@ function render(){
   document.getElementById("total").innerText=total.toLocaleString();
 }
 
-// ACTION
-function updateDB(){
-  db.collection("state").doc("current").set({ items: items });
-}
-
+// 🔥 ACTION
 function plus(i){ items[i].qty++; updateDB(); }
 function minus(i){ if(items[i].qty>0){ items[i].qty--; updateDB(); } }
 function reset(){ items.forEach(i=>i.qty=0); updateDB(); }
 
-// SAVE ORDER
+// 🔥 SAVE ORDER
 function saveOrder(){
   let total = items.reduce((s,i)=>s+i.price*i.qty,0);
 
