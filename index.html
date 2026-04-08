@@ -16,19 +16,21 @@ body {
 /* LOGO */
 .logo-box {
   background:white;
-  padding:15px;
   border-radius:50%;
-  width:140px;
-  height:140px;
+  width:160px;
+  height:160px;
   margin:10px auto;
   display:flex;
   align-items:center;
   justify-content:center;
   box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  overflow:hidden; /* 🔥 quan trọng */
 }
 
 .logo {
-  width:110px;
+  width:120%;
+  height:120%;
+  object-fit:cover;
 }
 
 /* TITLE */
