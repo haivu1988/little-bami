@@ -10,15 +10,34 @@ body {
   font-family: Arial;
   padding: 10px;
   background: #f2f2f2;
+  text-align:center;
 }
 
+/* LOGO */
+.logo-box {
+  background:white;
+  padding:15px;
+  border-radius:50%;
+  width:140px;
+  height:140px;
+  margin:10px auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.logo {
+  width:120px;
+}
+
+/* TITLE */
 h2 {
-  text-align: center;
-  font-size: 26px;
-  margin-bottom: 15px;
+  margin:10px 0 15px;
+  color:#1f8f8b;
 }
 
-/* CARD */
+/* ITEM CARD */
 .item {
   display:flex;
   justify-content:space-between;
@@ -27,10 +46,9 @@ h2 {
   background:white;
   padding:15px;
   border-radius:15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-/* TEXT */
 .name {
   font-size:18px;
   font-weight:bold;
@@ -38,7 +56,7 @@ h2 {
 
 .price {
   font-size:14px;
-  color:#666;
+  color:#777;
 }
 
 /* BUTTON GROUP */
@@ -52,37 +70,35 @@ h2 {
 button {
   border:none;
   border-radius:50%;
-  width:50px;
-  height:50px;
+  width:52px;
+  height:52px;
   font-size:22px;
   font-weight:bold;
 }
 
 .plus {
-  background:#00a86b;
+  background:#1f8f8b;
   color:white;
 }
 
 .minus {
-  background:#e74c3c;
+  background:#ff4d4f;
   color:white;
 }
 
 .qty {
   font-size:20px;
   width:40px;
-  text-align:center;
 }
 
 /* TOTAL */
 .total {
   font-size:26px;
   font-weight:bold;
-  text-align:center;
   margin-top:20px;
 }
 
-/* RESET BUTTON */
+/* RESET */
 .reset {
   margin-top:20px;
   width:100%;
@@ -97,7 +113,12 @@ button {
 
 <body>
 
-<h2>🥖 Little Bami</h2>
+<!-- LOGO -->
+<div class="logo-box">
+  <img src="/mnt/data/logo Little Bami.jpg" class="logo">
+</div>
+
+<h2>Little Bami</h2>
 
 <div id="list"></div>
 
@@ -194,7 +215,7 @@ function render(){
 function plus(i){ items[i].qty++; updateDB(); }
 function minus(i){ if(items[i].qty>0){ items[i].qty--; updateDB(); } }
 
-// RESET CÓ PASS
+// RESET
 function resetWithPass(){
   let pass = prompt("Nhập mật khẩu:");
 
